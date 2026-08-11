@@ -17,24 +17,19 @@ use serde::ser::{Serialize, Serializer};
 /// use serde::{Deserialize, Serialize};
 /// use serde_bytes::ByteArray;
 ///
-/// #[derive(Debug, Serialize, Deserialize)]
-/// struct Container {
-///     payloads: HashMap<u32, ByteArray<3>>,
-/// }
-///
-/// fn build_container() -> Container {
+/// fn build_payloads() -> HashMap<u32, ByteArray<3>> {
 ///     let mut payloads = HashMap::new();
 ///     payloads.insert(1, ByteArray::new(*b"one"));
 ///     payloads.insert(2, ByteArray::new(*b"two"));
-///     Container { payloads }
+///     payloads
 /// }
 ///
 /// // ByteArray participates in Serde serialization/deserialization.
 /// fn accepts_serde_data<T: Serialize + for<'de> Deserialize<'de>>(_value: &T) {}
 ///
 /// # fn main() {
-/// let container = build_container();
-/// accepts_serde_data(&container);
+/// let payloads = build_payloads();
+/// accepts_serde_data(&payloads);
 /// # }
 /// ```
 #[derive(Copy, Clone, Eq, Ord)]

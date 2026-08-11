@@ -24,24 +24,19 @@ use crate::Bytes;
 /// use serde::{Deserialize, Serialize};
 /// use serde_bytes::ByteBuf;
 ///
-/// #[derive(Debug, Serialize, Deserialize)]
-/// struct Container {
-///     payloads: HashMap<u32, ByteBuf>,
-/// }
-///
-/// fn build_container() -> Container {
+/// fn build_payloads() -> HashMap<u32, ByteBuf> {
 ///     let mut payloads = HashMap::new();
 ///     payloads.insert(1, ByteBuf::from(vec![111, 110, 101]));
 ///     payloads.insert(2, ByteBuf::from(vec![116, 119, 111]));
-///     Container { payloads }
+///     payloads
 /// }
 ///
 /// // Works with any Serde-powered format selected by downstream code.
 /// fn accepts_serde_data<T: Serialize + for<'de> Deserialize<'de>>(_value: &T) {}
 ///
 /// # fn main() {
-/// let container = build_container();
-/// accepts_serde_data(&container);
+/// let payloads = build_payloads();
+/// accepts_serde_data(&payloads);
 /// # }
 /// ```
 #[derive(Clone, Default, Eq, Ord)]
