@@ -13,26 +13,28 @@ use serde::ser::{Serialize, Serializer};
 ///
 /// ```
 /// use std::collections::HashMap;
-/// use std::io;
 ///
+/// use serde::{Deserialize, Serialize};
 /// use serde_bytes::ByteArray;
 ///
-/// fn deserialize_bytearrays() -> Result<(), bincode::error::DecodeError> {
-///     let example_data = [2, 2, 3, 116, 119, 111, 1, 3, 111, 110, 101];
-///
-///     let map: HashMap<u32, ByteArray<3>>;
-///     (map, _) = bincode::serde::decode_from_slice(
-///         &example_data,
-///         bincode::config::standard(),
-///     )?;
-///
-///     println!("{:?}", map);
-///
-///     Ok(())
+/// #[derive(Debug, Serialize, Deserialize)]
+/// struct Container {
+///     payloads: HashMap<u32, ByteArray<3>>,
 /// }
-/// #
+///
+/// fn build_container() -> Container {
+///     let mut payloads = HashMap::new();
+///     payloads.insert(1, ByteArray::new(*b"one"));
+///     payloads.insert(2, ByteArray::new(*b"two"));
+///     Container { payloads }
+/// }
+///
+/// // ByteArray participates in Serde serialization/deserialization.
+/// fn accepts_serde_data<T: Serialize + for<'de> Deserialize<'de>>(_value: &T) {}
+///
 /// # fn main() {
-/// #     deserialize_bytearrays().unwrap();
+/// let container = build_container();
+/// accepts_serde_data(&container);
 /// # }
 /// ```
 #[derive(Copy, Clone, Eq, Ord)]

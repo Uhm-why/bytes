@@ -19,27 +19,24 @@ use serde::ser::{Serialize, Serializer};
 ///
 /// ```
 /// use std::collections::HashMap;
-/// use std::io;
 ///
+/// use serde::Serialize;
 /// use serde_bytes::Bytes;
 ///
-/// fn print_encoded_cache() -> Result<(), bincode::error::EncodeError> {
+/// fn prepare_cache() -> HashMap<u32, &'static Bytes> {
 ///     let mut cache = HashMap::new();
 ///     cache.insert(3, Bytes::new(b"three"));
 ///     cache.insert(2, Bytes::new(b"two"));
 ///     cache.insert(1, Bytes::new(b"one"));
-///
-///     bincode::serde::encode_into_std_write(
-///         &cache,
-///         &mut io::stdout(),
-///         bincode::config::standard(),
-///     )?;
-///
-///     Ok(())
+///     cache
 /// }
-/// #
+///
+/// // The map can be serialized by any Serde serializer chosen by the caller.
+/// fn accepts_any_serializer<T: Serialize>(_value: &T) {}
+///
 /// # fn main() {
-/// #     print_encoded_cache().unwrap();
+/// let cache = prepare_cache();
+/// accepts_any_serializer(&cache);
 /// # }
 /// ```
 #[derive(Eq, Ord)]
